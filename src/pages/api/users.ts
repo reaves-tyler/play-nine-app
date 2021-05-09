@@ -1,19 +1,31 @@
 import User from "./UserModel";
+import connectDB from "../../utils/dbConnect";
 
-// Fake users data
-// const users = [
-//   { id: 1 },
-//   { id: 2 },
-//   { id: 3 },
-//   { id: 4 },
-//   { id: 5 },
-//   { id: 6 },
-//   { id: 67 },
-// ];
+const handler = async (req, res) => {
+  if (req.method === "POST") {
+    // Check if name, email or password is provided
+    const { name, email, password } = req.body;
+    if (name && email && password) {
+      try {
+        // Hash password to store it in DB
+        var passwordhash = await bcrypt.sign(password);
+        var user = new User({
+          name,
+          email,
+          password: passwordhash,
+        });
+        // Create new user
+        var usercreated = await user.save();
+        return res.status(200).send(usercreated);
+      } catch (error) {
+        return res.status(500).send(error.message);
+      }
+    } else {
+      res.status(422).send("data_incomplete");
+    }
+  } else {
+    res.status(422).send("req_method_not_supported");
+  }
+};
 
-export default async function handler(_req, res) {
-  // Get data from your database
-  // res.status(200).json(users);
-  const users = await User.find({});
-  res.status(200).json(users);
-}
+export default connectDB(handler);

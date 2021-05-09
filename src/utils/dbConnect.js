@@ -1,11 +1,11 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
-const { MONGODB_URI } = process.env
+const { MONGODB_URI } = process.env;
 
 if (!MONGODB_URI) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local'
-  )
+    "Please define the MONGODB_URI environment variable inside .env.local"
+  );
 }
 
 /**
@@ -13,33 +13,53 @@ if (!MONGODB_URI) {
  * in development. This prevents connections growing exponentially
  * during API Route usage.
  */
-let cached = global.mongoose
+// let cached = global.mongoose;
 
-if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null }
-}
+// if (!cached) {
+//   cached = global.mongoose = { conn: null, promise: null };
+// }
 
-async function dbConnect() {
-  if (cached.conn) {
-    return cached.conn
+// async function dbConnect() {
+//   console.log(MONGODB_URI);
+//   if (cached.conn) {
+//     return cached.conn;
+//   }
+
+//   if (!cached.promise) {
+//     const opts = {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//       bufferCommands: false,
+//       bufferMaxEntries: 0,
+//       useFindAndModify: false,
+//       useCreateIndex: true,
+//     };
+
+//     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+//       return mongoose;
+//     });
+//   }
+//   cached.conn = await cached.promise;
+//   return cached.conn;
+// }
+
+// export default dbConnect;
+
+// import mongoose from 'mongoose';
+
+const connectDB = (handler) => async (req, res) => {
+  if (mongoose.connections[0].readyState) {
+    // Use current db connection
+    return handler(req, res);
   }
+  // Use new db connection
+  await mongoose.connect(process.env.MONGODB_URI, {
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+    useNewUrlParser: true,
+  });
+  return handler(req, res);
+};
 
-  if (!cached.promise) {
-    const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      bufferCommands: false,
-      bufferMaxEntries: 0,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    }
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose
-    })
-  }
-  cached.conn = await cached.promise
-  return cached.conn
-}
-
-export default dbConnect
+export default connectDB;
