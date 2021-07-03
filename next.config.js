@@ -1,5 +1,5 @@
 module.exports = {
-  future: {
-    webpack5: true,
+  env: {
+    mongodburl: process.env.MONGODB_URI,
   },
 };
