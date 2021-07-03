@@ -1,15 +1,21 @@
 import mongoose from 'mongoose';
 var Schema = mongoose.Schema;
 
-var user = new Schema({
+const UserSchema = new Schema({
     name: {
         type: String,
         required: true
     },
 });
 
-mongoose.models = {};
 
-var User = mongoose.model('User', user);
+// https://github.com/dherault/serverless-offline/issues/258#issuecomment-501000703
+let user
 
-export default User;
+try {
+    user = mongoose.connection.model('User')
+} catch (e) {
+    user = mongoose.model('User', UserSchema)
+}
+
+module.exports = user
