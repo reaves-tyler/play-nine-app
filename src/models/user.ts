@@ -18,4 +18,4 @@ try {
     user = mongoose.model('User', UserSchema)
 }
 
-module.exports = user
+export default user
