@@ -1,5 +1,4 @@
 import connectDB from "../../../middleware/mongodb";
-// import bcrypt from '../../middleware/bcrypt';
 import Game from "../../../models/game";
 
 const handler = async (req, res) => {
