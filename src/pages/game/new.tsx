@@ -1,7 +1,6 @@
-import { Box, Button, Container, Input } from "@chakra-ui/react";
-import { DarkModeSwitch } from "../../components/DarkModeSwitch";
 import { useState } from "react";
 import axios from "axios";
+import { Button, Input } from "@material-ui/core";
 
 export default function Games() {
   const [value, setValue] = useState("");
@@ -12,18 +11,13 @@ export default function Games() {
   };
 
   return (
-    <Container>
-      <DarkModeSwitch />
-      <Box padding="3">
-        <Input
-          value={value}
-          onChange={handleChange}
-          placeholder="Enter the name of your game"
-        />
-        <Button colorScheme="teal" width="full" onClick={newGame}>
-          Play!
-        </Button>
-      </Box>
-    </Container>
+    <>
+      <Input
+        value={value}
+        onChange={handleChange}
+        placeholder="Enter the name of your game"
+      />
+      <Button onClick={newGame}>Play!</Button>
+    </>
   );
 }

@@ -1,7 +1,15 @@
 import useSwr from "swr";
 import Link from "next/link";
-import { Box, Container } from "@chakra-ui/react";
-import { DarkModeSwitch } from "../../components/DarkModeSwitch";
+import {
+  Card,
+  CardActions,
+  CardContent,
+  Container,
+  Button,
+  Grid,
+} from "@material-ui/core";
+import { Header } from "../../components/Header";
+import { Navigation } from "../../components/Navigation";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -13,18 +21,24 @@ export default function games() {
 
   return (
     <Container>
-      <DarkModeSwitch />
-      <Box padding="3">
-        <ul>
-          {data.map((game) => (
-            <li key={game.id}>
-              <Link href="/game/[id]" as={`/game/${game._id}`}>
-                <a>{`game ${game.name}`}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </Box>
+      <Header page="Games" />
+      <Grid container spacing={3}>
+        {data.map((game) => (
+          <Grid item xs={3}>
+            <Card key={game.id}>
+              <CardContent>{game.name}</CardContent>
+              <CardActions>
+                <Link href="/game/[id]" as={`/game/${game._id}`}>
+                  <Button size="large" color="primary">
+                    Join
+                  </Button>
+                </Link>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
+      <Navigation />
     </Container>
   );
 }
