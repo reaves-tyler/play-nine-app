@@ -1,62 +1,36 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from "@chakra-ui/react";
-import { CheckCircleIcon, LinkIcon } from "@chakra-ui/icons";
+import React from "react";
+import { Button, Grid, Typography } from "@material-ui/core";
+import { Header } from "../components/Header";
 
-import { Hero } from "../components/Hero";
-import { Container } from "../components/Container";
-import { Main } from "../components/Main";
-import { DarkModeSwitch } from "../components/DarkModeSwitch";
-import { CTA } from "../components/CTA";
-import { Footer } from "../components/Footer";
-
-const Index = () => (
-  <Container height="100vh">
-    <Hero />
-    <Main>
-      <Text>
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{" "}
-        <Code>typescript</Code>.
-      </Text>
-
-      <List spacing={3} my={0}>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
+export default function Index() {
+  return (
+    <>
+      <Header />
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h3">Welcome to Play Nine!</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            color="primary"
+            size="large"
+            href="/game/new"
+            variant="outlined"
           >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink href="/user" flexGrow={1} mr={2}>
-            Users <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
-
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
-  </Container>
-);
-
-export default Index;
+            Start a new game
+          </Button>
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            color="secondary"
+            size="large"
+            href="/game"
+            variant="outlined"
+          >
+            Join a game
+          </Button>
+        </Grid>
+      </Grid>
+    </>
+  );
+}
