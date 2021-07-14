@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import useSWR from "swr";
+import { Grid } from "@material-ui/core";
+import { Header } from "../../components/Header";
 
 const fetcher = async (url) => {
   const res = await fetch(url);
@@ -22,17 +24,13 @@ export default function Game() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{data.name}</td>
-        </tr>
-      </tbody>
-    </table>
+    <>
+      <Header />
+      <Grid container spacing={3}>
+        <Grid item xs={3}>
+          {data.name}
+        </Grid>
+      </Grid>
+    </>
   );
 }

@@ -4,12 +4,10 @@ import {
   Card,
   CardActions,
   CardContent,
-  Container,
   Button,
   Grid,
 } from "@material-ui/core";
 import { Header } from "../../components/Header";
-import { Navigation } from "../../components/Navigation";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -20,11 +18,11 @@ export default function games() {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <Container>
-      <Header page="Games" />
+    <>
+      <Header />
       <Grid container spacing={3}>
         {data.map((game) => (
-          <Grid item xs={3}>
+          <Grid item xs={6}>
             <Card key={game.id}>
               <CardContent>{game.name}</CardContent>
               <CardActions>
@@ -38,7 +36,6 @@ export default function games() {
           </Grid>
         ))}
       </Grid>
-      <Navigation />
-    </Container>
+    </>
   );
 }

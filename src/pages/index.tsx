@@ -1,26 +1,36 @@
 import React from "react";
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import { Header } from "../components/Header";
-import { Navigation } from "../components/Navigation";
 
 export default function Index() {
   return (
-    <Container maxWidth="sm">
+    <>
+      <Header />
       <Grid container spacing={3}>
-        <Header page="Home" />
         <Grid item xs={12}>
-          Welcome to Play Nine!
+          <Typography variant="h3">Welcome to Play Nine!</Typography>
         </Grid>
-        <Grid item xs={12}>
-          <Button color="primary" size="large" href="/game/new">
-            New Game
+        <Grid item xs={6}>
+          <Button
+            color="primary"
+            size="large"
+            href="/game/new"
+            variant="outlined"
+          >
+            Start a new game
           </Button>
-          <Button color="secondary" size="large" href="/game/new">
-            New Game
+        </Grid>
+        <Grid item xs={6}>
+          <Button
+            color="secondary"
+            size="large"
+            href="/game"
+            variant="outlined"
+          >
+            Join a game
           </Button>
         </Grid>
       </Grid>
-      <Navigation />
-    </Container>
+    </>
   );
 }
