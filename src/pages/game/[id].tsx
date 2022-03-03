@@ -1,17 +1,6 @@
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import {
-    Grid,
-    Input,
-    Button,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-} from '@material-ui/core';
+import { Row, Input, Button, Col, Table, Typography } from 'antd';
 import { Header } from '../../components/Header';
 import React, { useState } from 'react';
 import axios from 'axios';
@@ -27,6 +16,7 @@ const fetcher = async (url) => {
 };
 
 export default function Game() {
+    const { Title } = Typography;
     const { query } = useRouter();
     const { data, error, mutate } = useSWR(() => query.id && `/api/score/${query.id}`, fetcher);
     const [value, setValue] = useState<number>();
@@ -47,59 +37,50 @@ export default function Game() {
     return (
         <>
             <Header />
-            <Grid container>
-                <Grid item xs={12}>
-                    <Input
-                        value={value}
-                        onChange={(e) => setValue(Number(e.target.value))}
-                        placeholder='Enter score'
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <Button
-                        variant='text'
-                        color='secondary'
-                        onClick={(e) => newScore(e, false)}
-                        fullWidth
-                        disabled={!value}>
+            <br />
+            <Row justify='center'>
+                <Title level={4}>Enter score for round</Title>
+            </Row>
+            <Row>
+                <Input value={value} onChange={(e) => setValue(Number(e.target.value))} placeholder='Enter score' />
+            </Row>
+            <br />
+            <Row>
+                <Col span={12}>
+                    {' '}
+                    <Button size='large' onClick={(e) => newScore(e, false)} disabled={!value} block>
                         Negative
                     </Button>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button
-                        variant='text'
-                        color='primary'
-                        onClick={(e) => newScore(e, true)}
-                        fullWidth
-                        disabled={!value}>
+                </Col>
+                <Col span={12}>
+                    {' '}
+                    <Button type='primary' size='large' onClick={(e) => newScore(e, true)} disabled={!value} block>
                         Positive
                     </Button>
-                </Grid>
-                <br />
-                <Grid item xs={12}>
-                    <TableContainer component={Paper}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Player</TableCell>
-                                    <TableCell align='right'>Score</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {data.map((row) => (
-                                    <TableRow key={row.name}>
-                                        <TableCell component='th' scope='row'>
-                                            {row.player}
-                                        </TableCell>
-                                        <TableCell align='right'>{row.value}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </Grid>
-            </Grid>
+                </Col>
+            </Row>
+            <br />
+            <br />
+            <Row>
+                <Col span={24}>
+                    <Table
+                        dataSource={data}
+                        columns={[
+                            {
+                                title: 'Player',
+                                dataIndex: 'player',
+                                key: 'player',
+                            },
+                            {
+                                title: 'Score',
+                                dataIndex: 'value',
+                                key: 'value',
+                            },
+                        ]}
+                        pagination={false}
+                    />
+                </Col>
+            </Row>
         </>
     );
 }

@@ -1,26 +1,28 @@
-import React from 'react';
-import { Button, Grid, Typography } from '@material-ui/core';
 import { Header } from '../components/Header';
+import { Row, Button, Typography } from 'antd';
 
 export default function Index() {
+    const { Title } = Typography;
+
     return (
         <>
             <Header />
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <Typography variant='h3'>Welcome to Play Nine!</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button color='primary' size='large' href='/game/new' variant='outlined'>
-                        Start a new game
-                    </Button>
-                </Grid>
-                <Grid item xs={6}>
-                    <Button color='secondary' size='large' href='/game' variant='outlined'>
-                        Join a game
-                    </Button>
-                </Grid>
-            </Grid>
+
+            <Row justify='center'>
+                <Title level={2}>Welcome to Play Nine!</Title>
+            </Row>
+            <br />
+            <Row justify='center'>
+                <Button type='primary' size='large' href='/game/new' block>
+                    Start a new game
+                </Button>
+            </Row>
+            <br />
+            <Row justify='center'>
+                <Button type='primary' size='large' href='/game' block>
+                    Join a game
+                </Button>
+            </Row>
         </>
     );
 }

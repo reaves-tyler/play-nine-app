@@ -1,12 +1,13 @@
 import useSwr from 'swr';
 import Link from 'next/link';
-import { Card, CardActions, CardContent, Button, Grid } from '@material-ui/core';
 import { Header } from '../../components/Header';
 import axios from 'axios';
+import { Row, Button, Col, Card, Typography } from 'antd';
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function games() {
+    const { Title } = Typography;
     const { data, error, mutate } = useSwr('/api/game', fetcher);
 
     if (error) return <div>Failed to load games</div>;
@@ -21,15 +22,13 @@ export default function games() {
         return (
             <>
                 <Header />
-                <Grid container>
-                    <Grid item xs={12}>
-                        <Link href='/game/new'>
-                            <Button size='large' variant='contained' color='primary' fullWidth>
-                                Create New Game
-                            </Button>
-                        </Link>
-                    </Grid>
-                </Grid>
+                <Row>
+                    <Link href='/game/new'>
+                        <Button size='large' type='primary'>
+                            Create Game
+                        </Button>
+                    </Link>
+                </Row>
             </>
         );
     }
@@ -37,28 +36,37 @@ export default function games() {
     return (
         <>
             <Header />
-            <Grid container spacing={3}>
+            <Row justify='center'>
+                <Title level={2}>Join game</Title>
+            </Row>
+            <Row justify='center' gutter={[32, 32]}>
                 {data.map(
                     (game) =>
                         game.active && (
-                            <Grid item xs={6} key={game._id}>
-                                <Card key={game.id}>
-                                    <CardContent>{game.name}</CardContent>
-                                    <CardActions>
-                                        <Link href='/game/[id]' as={`/game/${game._id}`}>
-                                            <Button size='large' color='primary'>
-                                                Join
-                                            </Button>
-                                        </Link>
-                                        <Button size='large' color='secondary' onClick={(e) => endGame(e, game._id)}>
-                                            End
-                                        </Button>
-                                    </CardActions>
-                                </Card>
-                            </Grid>
+                            <>
+                                <Col span={12}>
+                                    <Card size='small' title={game.name}>
+                                        {' '}
+                                        <Row justify='center'>
+                                            <Col span={12}>
+                                                <Link href='/game/[id]' as={`/game/${game._id}`}>
+                                                    <Button size='large' type='primary' block>
+                                                        Join
+                                                    </Button>
+                                                </Link>
+                                            </Col>
+                                            <Col span={12}>
+                                                <Button size='large' onClick={(e) => endGame(e, game._id)} block>
+                                                    End
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Card>
+                                </Col>
+                            </>
                         )
                 )}
-            </Grid>
+            </Row>
         </>
     );
 }

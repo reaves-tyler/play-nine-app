@@ -19,13 +19,15 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "target": "esnext",
-    "strict": false
+    "strict": false,
+    "incremental": true
   },
   "exclude": [
     "node_modules"
   ],
   "include": [
     "**/*.ts",
-    "**/*.tsx"
-, "src/pages/index.js"  ]
+    "**/*.tsx",
+    "src/pages/index.js"
+  ]
 }
