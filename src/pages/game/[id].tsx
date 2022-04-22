@@ -20,7 +20,9 @@ export default function Game({}) {
     const { data: session } = useSession();
     const { Title } = Typography;
     const { query } = useRouter();
-    const { data, error, mutate } = useSWR(() => query.id && `/api/score/${query.id}`, fetcher);
+    const { data, error, mutate } = useSWR(() => query.id && `/api/score/${query.id}`, fetcher, {
+        refreshInterval: 5000,
+    });
     const [value, setValue] = useState<string | number>(null);
 
     const [game, setGame] = useState<string>('');

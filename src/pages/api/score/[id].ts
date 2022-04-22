@@ -14,6 +14,7 @@ const handler = async (req, res) => {
                 value: _.sumBy(objs, 'value'),
                 count: objs.length + 1,
             }))
+            .sort((a, b) => a.value - b.value)
             .value();
 
         return res.status(200).send(groupedScores);
