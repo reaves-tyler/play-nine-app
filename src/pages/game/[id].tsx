@@ -4,6 +4,7 @@ import { Row, Input, Button, Col, Table, Typography } from 'antd';
 import { Header } from '../../components/Header';
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 const fetcher = async (url) => {
     const res = await fetch(url);
@@ -15,46 +16,67 @@ const fetcher = async (url) => {
     return data;
 };
 
-export default function Game() {
+export default function Game({}) {
+    const { data: session } = useSession();
     const { Title } = Typography;
     const { query } = useRouter();
     const { data, error, mutate } = useSWR(() => query.id && `/api/score/${query.id}`, fetcher);
-    const [value, setValue] = useState<number>();
+    const [value, setValue] = useState<string | number>(null);
+
+    const [game, setGame] = useState<string>('');
+
+    if (query.id) {
+        axios.get(`/api/game/${query.id}`).then((res) => {
+            setGame(res.data.name);
+        });
+    }
 
     if (error) return <div>{error.message}</div>;
     if (!data) return <div>Loading...</div>;
 
     const newScore = async (e, positive) => {
-        await axios.post('/api/score', {
-            gameID: query.id,
-            player: 'Test Player',
-            value: positive ? 0 + value : 0 - value,
-        });
-        setValue(0);
+        if (!isNaN(Number(value))) {
+            await axios.post('/api/score', {
+                gameID: query.id,
+                player: session?.user.email,
+                value: positive ? 0 + Number(value) : 0 - Number(value),
+            });
+        }
+
+        setValue(null);
         mutate();
     };
 
     return (
         <>
             <Header />
-            <br />
             <Row justify='center'>
-                <Title level={4}>Enter score for round</Title>
+                <Title level={4}>{game}</Title>
             </Row>
+            <br />
             <Row>
-                <Input value={value} onChange={(e) => setValue(Number(e.target.value))} placeholder='Enter score' />
+                <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder='Enter score' />
             </Row>
             <br />
             <Row>
                 <Col span={12}>
                     {' '}
-                    <Button size='large' onClick={(e) => newScore(e, false)} disabled={!value} block>
+                    <Button
+                        size='large'
+                        onClick={(e) => newScore(e, false)}
+                        disabled={value === null || isNaN(Number(value)) || String(value).trim() === ''}
+                        block>
                         Negative
                     </Button>
                 </Col>
                 <Col span={12}>
                     {' '}
-                    <Button type='primary' size='large' onClick={(e) => newScore(e, true)} disabled={!value} block>
+                    <Button
+                        type='primary'
+                        size='large'
+                        onClick={(e) => newScore(e, true)}
+                        disabled={value === null || isNaN(Number(value)) || String(value).trim() === ''}
+                        block>
                         Positive
                     </Button>
                 </Col>
@@ -75,6 +97,11 @@ export default function Game() {
                                 title: 'Score',
                                 dataIndex: 'value',
                                 key: 'value',
+                            },
+                            {
+                                title: 'Round',
+                                dataIndex: 'count',
+                                key: 'count',
                             },
                         ]}
                         pagination={false}

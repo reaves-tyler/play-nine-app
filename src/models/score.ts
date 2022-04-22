@@ -18,7 +18,7 @@ const ScoreSchema = new Schema({
 
 // https://github.com/dherault/serverless-offline/issues/258#issuecomment-501000703
 let score;
-const collection = 'Score';
+const collection = process.env.SCORE_COLLECTION || 'ScoreTest';
 
 try {
     score = mongoose.connection.model(collection);

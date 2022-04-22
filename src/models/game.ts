@@ -14,7 +14,7 @@ const GameSchema = new Schema({
 
 // https://github.com/dherault/serverless-offline/issues/258#issuecomment-501000703
 let game;
-const collection = 'Game';
+const collection = process.env.GAME_COLLECTION || 'GameTest';
 
 try {
     game = mongoose.connection.model(collection);

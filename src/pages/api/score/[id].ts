@@ -12,6 +12,7 @@ const handler = async (req, res) => {
             .map((objs, key) => ({
                 player: key,
                 value: _.sumBy(objs, 'value'),
+                count: objs.length + 1,
             }))
             .value();
 
