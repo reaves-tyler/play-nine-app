@@ -5,7 +5,7 @@ const handler = async (req, res) => {
     if (req.method === 'POST') {
         const { gameID, player, value } = req.body;
 
-        if (gameID && player && value) {
+        if (gameID && player && value !== undefined) {
             try {
                 const score = new Score({
                     gameID,
