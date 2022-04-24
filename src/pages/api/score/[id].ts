@@ -12,7 +12,7 @@ const handler = async (req, res) => {
             .map((objs, key) => ({
                 player: key,
                 value: _.sumBy(objs, 'value'),
-                count: objs.length + 1,
+                count: objs.length,
             }))
             .sort((a, b) => a.value - b.value)
             .value();
